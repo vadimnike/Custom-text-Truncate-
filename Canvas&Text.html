@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas&text</title>
+</head>
+<body>
+<div id="txtWrap">
+    <span id="text" style="font-size: 16px; font-family:'Tahoma'; ">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae cupiditate doloribus dolorum et fugiat fugit labore nisi, odio tenetur ut.</span>
+</div>
+<!--<div id="test"></div>-->
+</body>
+<script>
+    var text = document.getElementById('text');
+    var txtWrap = document.getElementById('txtWrap');
+    var maxWidth = text.parentNode.clientWidth;
+    var lineNumber = 1;
+    var txtLength = text.innerHTML.length;
+    // console.warn(txtLength);
+    console.warn('maxWidth', maxWidth);
+
+
+    // Canvas state
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    const style = getComputedStyle(text);
+    var font = [
+      style['font-style'],
+      style['font-weight'],
+      style['font-size'],
+      style['font-family']
+    ].join(' ');
+    console.warn('font: ', font);
+    ctx.font = font;
+
+
+
+
+    // var testWrap = document.getElementById('test');
+    // testWrap.setAttribute('style', `font:${font}`);
+    // testWrap.innerHTML = text.innerHTML;
+    //
+
+
+
+    // var measureWidth = ctx.measureText(newtext).width;
+    // console.warn('ctx.measureText(text.innerHTML) ', ctx.measureText(newtext));
+    // console.warn('words', words);
+
+    // while(maxWidth < measureWidth) {
+    //   words.pop();
+    //   newtext = words.join(' ');
+    //   measureWidth = ctx.measureText(newtext).width;
+    //   console.warn('measureWidth', measureWidth);
+    // }
+    // console.warn('newtext', newtext);
+    // var truncatedTextIndex = newtext.lastIndexOf(' ');
+
+    var newtext = text.innerHTML;
+    var words = newtext.split(' ');
+
+
+    function getLines(ctx, text, maxWidth) {
+      var words = text.split(" ");
+      var lines = [];
+      var currentLine = words[0];
+
+      for (var i = 1; i < words.length; i++) {
+        var word = words[i];
+        var width = ctx.measureText(currentLine + " " + word).width;
+        if (width < maxWidth) {
+          currentLine += " " + word;
+        } else {
+          lines.push(currentLine);
+          currentLine = word;
+        }
+      }
+      lines.push(currentLine);
+      return lines;
+    }
+
+    var currentlines = getLines(ctx, newtext, maxWidth);
+    console.warn('lines', currentlines);
+
+
+    function getReducedText(lines, lineNumber){
+      var newStrArr = [lines[0]];
+      for (var i = 1; i < lineNumber; i++) {
+        console.warn(`lines[${i}]`,lines[i]);
+        var el = lines[i];
+        newStrArr = newStrArr.concat(el);
+
+      }
+
+      console.warn('newStrArr ',newStrArr);
+
+      var newStr = newStrArr.join(' ');
+      var lastPos = newStr.lastIndexOf(' ');
+      var reducedStr = newStr.substr(0, lastPos).concat('...');
+      return reducedStr;
+    }
+
+    function truncatedText(lines, getReducedtext) {
+      text.innerHTML = getReducedtext;
+    }
+
+    window.addEventListener('resize', function(){
+      text.innerHTML = getReducedText(currentlines, 2)
+    })
+
+</script>
+</html>
