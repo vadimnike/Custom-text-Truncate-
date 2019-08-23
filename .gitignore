@@ -1,0 +1,13 @@
+.idea/
+coverage/
+dist/
+built/
+node_modules/
+test/reports
+.DS_Store
+.last-css-build
+preview/messages.js
+preview/bundle.js
+iframe/bundle.js
+npm-debug.log
+package-lock.json
