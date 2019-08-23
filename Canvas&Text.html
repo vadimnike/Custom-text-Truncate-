@@ -11,53 +11,9 @@
 <!--<div id="test"></div>-->
 </body>
 <script>
-    var text = document.getElementById('text');
-    var txtWrap = document.getElementById('txtWrap');
-    var maxWidth = text.parentNode.clientWidth;
-    var lineNumber = 1;
-    var txtLength = text.innerHTML.length;
-    // console.warn(txtLength);
-    console.warn('maxWidth', maxWidth);
 
-
-    // Canvas state
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    const style = getComputedStyle(text);
-    var font = [
-      style['font-style'],
-      style['font-weight'],
-      style['font-size'],
-      style['font-family']
-    ].join(' ');
-    console.warn('font: ', font);
-    ctx.font = font;
-
-
-
-
-    // var testWrap = document.getElementById('test');
-    // testWrap.setAttribute('style', `font:${font}`);
-    // testWrap.innerHTML = text.innerHTML;
-    //
-
-
-
-    // var measureWidth = ctx.measureText(newtext).width;
-    // console.warn('ctx.measureText(text.innerHTML) ', ctx.measureText(newtext));
-    // console.warn('words', words);
-
-    // while(maxWidth < measureWidth) {
-    //   words.pop();
-    //   newtext = words.join(' ');
-    //   measureWidth = ctx.measureText(newtext).width;
-    //   console.warn('measureWidth', measureWidth);
-    // }
-    // console.warn('newtext', newtext);
-    // var truncatedTextIndex = newtext.lastIndexOf(' ');
-
-    var newtext = text.innerHTML;
-    var words = newtext.split(' ');
+  var truncatetext = getTruncatetext(2);
+  window.addEventListener('resize', getTruncatetext);
 
 
     function getLines(ctx, text, maxWidth) {
@@ -79,8 +35,7 @@
       return lines;
     }
 
-    var currentlines = getLines(ctx, newtext, maxWidth);
-    console.warn('lines', currentlines);
+
 
 
     function getReducedText(lines, lineNumber){
@@ -100,13 +55,36 @@
       return reducedStr;
     }
 
-    function truncatedText(lines, getReducedtext) {
-      text.innerHTML = getReducedtext;
-    }
 
-    window.addEventListener('resize', function(){
-      text.innerHTML = getReducedText(currentlines, 2)
-    })
+function getTruncatetext(number = 1) {
+  var outputText = document.getElementById('text');
+  var maxWidth = outputText.parentNode.clientWidth;
+
+  console.warn('maxWidth', maxWidth);
+
+
+  // Canvas state
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  const style = getComputedStyle(text);
+  var font = [
+    style['font-style'],
+    style['font-weight'],
+    style['font-size'],
+    style['font-family']
+  ].join(' ');
+  console.warn('font: ', font);
+  ctx.font = font;
+
+  var newtext = outputText.innerHTML;
+  var currentLines = getLines(ctx, newtext, maxWidth);
+  console.warn('lines', currentLines);
+  outputText.innerHTML = getReducedText(currentLines, number)
+}
+
+
+
+
 
 </script>
 </html>
